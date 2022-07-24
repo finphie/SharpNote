@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.HighPerformance" Version="7.1.2" />
+    <PackageReference Include="FToolkit.Diagnostics.Abstractions" Version="0.5.0" />
+    <PackageReference Include="FToolkit.IO.Abstractions" Version="0.5.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="PathUtility" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharpNote.Services.Abstractions\SharpNote.Services.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

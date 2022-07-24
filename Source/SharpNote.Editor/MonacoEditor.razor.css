@@ -1,0 +1,13 @@
+#container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+#editor-container {
+  width: 50%;
+}
+
+#viewer-container {
+  width: 50%;
+}

@@ -1,0 +1,62 @@
+﻿@using Microsoft.Extensions.Logging
+@using Microsoft.JSInterop
+@using MessagePipe
+@using Reactive.Bindings.Extensions
+@using SharpNote.Core
+@using SharpNote.ViewModels
+@inject IJSRuntime JSRuntime
+@inject EditorViewModel viewModel
+@inject ILogger<MonacoEditor> _logger
+
+<div id="container">
+    <div id="editor-container"></div>
+    <div id="viewer-container"></div>
+</div>
+
+@code
+{
+    readonly Lazy<Task<IJSObjectReference>> moduleTask;
+    DotNetObjectReference<MonacoEditor>? _objRef;
+    IDisposable _disposable;
+
+    public MonacoEditor()
+    {
+        moduleTask = new(() => JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/SharpNote.Editor/js/interop.js").AsTask());
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _objRef = DotNetObjectReference.Create(this);
+        // _content/SharpNote.Editor/
+        var module = await moduleTask.Value;
+        await module.InvokeVoidAsync("createEditor", _objRef, "editor-container", "csharp");
+        await module.InvokeVoidAsync("createViewer", "viewer-container", "csharp");
+        // onDidChangeContent
+
+
+        _disposable = viewModel.ObserveProperty(static x => x.ViewerText)
+           .Subscribe(x => module.InvokeVoidAsync("setValue", "viewer", x));
+        
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+        _disposable?.Dispose();
+    }
+
+    [JSInvokable]
+    public void OnDidChangeContent(string text)
+        => viewModel.EditorText = text;
+
+    [JSInvokable]
+    public ValueTask<CompletionList> GetCompletionList(string sourceCode, int position)
+    {
+        return viewModel.GetCompletionList(sourceCode, position);
+    }
+}
