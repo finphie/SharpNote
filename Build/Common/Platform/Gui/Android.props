@@ -2,8 +2,8 @@
   <!--
     Android関連の設定
     https://learn.microsoft.com/xamarin/android/deploy-test/building-apps/build-properties
-    https://github.com/xamarin/xamarin-android/blob/v13.1.0.1/Documentation/guides/OneDotNet.md
-    https://github.com/xamarin/xamarin-android/blob/v13.1.0.1/src/Xamarin.Android.Build.Tasks/Microsoft.Android.Sdk/targets/Microsoft.Android.Sdk.DefaultProperties.targets
+    https://github.com/xamarin/xamarin-android/blob/34.0.43/Documentation/guides/OneDotNet.md
+    https://github.com/xamarin/xamarin-android/blob/34.0.43/src/Xamarin.Android.Build.Tasks/Microsoft.Android.Sdk/targets/Microsoft.Android.Sdk.DefaultProperties.targets
   -->
 
   <PropertyGroup>
@@ -27,8 +27,11 @@
     <!-- AOTコンパイルを有効にする。 -->
     <RunAOTCompilation>true</RunAOTCompilation>
 
-    <!--  AOTプロファイルを使用する。 -->
+    <!-- AOTプロファイルを使用する。 -->
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+
+    <!-- AOTコンパイル後に未使用のILを削除する。 -->
+    <AndroidStripILAfterAOT>true</AndroidStripILAfterAOT>
 
     <!-- リンクを基本クラスライブラリとユーザーのアセンブリで実行する。 -->
     <AndroidLinkMode>Full</AndroidLinkMode>
@@ -36,16 +39,10 @@
     <!-- Resourceクラスの入れ子になった型をリンクする。 -->
     <AndroidLinkResources>true</AndroidLinkResources>
 
-    <AndroidLinkTool>r8</AndroidLinkTool>
-
-    <!-- LLVMを使用する。 -->
+    <!-- LLVMを有効にする。 -->
     <EnableLLVM>true</EnableLLVM>
   </PropertyGroup>
 
   <Import Project="$(BuildCommonPublishDirectory)Publish.props" />
-
-  <PropertyGroup>
-    <InvariantGlobalization>false</InvariantGlobalization>
-  </PropertyGroup>
 
 </Project>
