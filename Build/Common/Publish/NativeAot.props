@@ -3,24 +3,22 @@
     Native AOT関連の設定
     実行ファイル作成のみに対応。（ネイティブライブラリ作成には未対応。）
     https://learn.microsoft.com/dotnet/core/deploying/native-aot/
-    https://github.com/dotnet/runtime/blob/v7.0.0/src/coreclr/nativeaot/docs/optimizing.md
+    https://github.com/dotnet/runtime/blob/v8.0.0/src/coreclr/nativeaot/docs/optimizing.md
     https://github.com/dotnet/corert/blob/master/Documentation/using-corert/optimizing-corert.md
   -->
-
-  <PropertyGroup>
-    <_TargetOS Condition="$(RuntimeIdentifier.StartsWith('win'))">windows</_TargetOS>
-    <_TargetOS Condition="$(RuntimeIdentifier.StartsWith('osx'))">osx</_TargetOS>
-    <_TargetOS Condition="'$(_TargetOS)' == ''">linux</_TargetOS>
-  </PropertyGroup>
 
   <PropertyGroup>
     <!-- Native AOTを有効にする。 -->
     <PublishAot>true</PublishAot>
 
+    <!-- シンボルファイルをコピーしない。 -->
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+
     <!-- シンボルをバイナリから削除する。 -->
     <StripSymbols>true</StripSymbols>
 
     <!-- より小さいコードサイズを優先する。 -->
+    <OptimizationPreference>Size</OptimizationPreference>
     <IlcOptimizationPreference>Size</IlcOptimizationPreference>
 
     <!-- スタックトレースにテキスト名を提供するメタデータの生成を無効にする。 -->
@@ -44,16 +42,5 @@
     <!-- 完全な型メタデータの生成を無効にする。 -->
     <IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
   </PropertyGroup>
-
-  <!-- シンボルファイルを削除する。 -->
-  <Target Name="_DeleteNativeSymbolFile" AfterTargets="CopyNativeBinary">
-    <PropertyGroup>
-      <_PublishFilePath>$(PublishDir)/$(MSBuildProjectName)</_PublishFilePath>
-    </PropertyGroup>
-
-    <Delete Condition="'$(Configuration)' != 'Debug' and $(_TargetOS) == 'windows'" Files="$(_PublishFilePath).pdb" />
-    <Delete Condition="'$(Configuration)' != 'Debug' and $(_TargetOS) == 'osx'" Files="$(_PublishFilePath).dwarf" />
-    <Delete Condition="'$(Configuration)' != 'Debug' and $(_TargetOS) == 'linux'" Files="$(_PublishFilePath).dbg" />
-  </Target>
 
 </Project>
