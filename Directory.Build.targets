@@ -2,8 +2,12 @@
 
   <Import Project="$(BuildCommonDirectory)Shared.targets" />
 
-  <Target Name="GetProjectIdentifier" >
-    <Message Importance="High" Text="$(MSBuildProjectName),%(ProjectIdentifier.Identity)" />
+  <Target Name="GetProjectIdentifier">
+    <PropertyGroup Condition="'$(IsPublishable)' != 'true'">
+      <ProjectIdentifier></ProjectIdentifier>
+    </PropertyGroup>
+
+    <Message Importance="High" Text="$(MSBuildProjectName),$(ProjectIdentifier)" />
   </Target>
 
 </Project>
