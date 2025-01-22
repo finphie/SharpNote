@@ -1,0 +1,41 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <_IsTest>$(MSBuildProjectName.EndsWith('Tests'))</_IsTest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" Version="1.0.1" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(_IsTest)' == 'true'">
+    <!--
+      [SA0001]
+      All diagnostics of XML documentation comments has been disabled due to the current project configuration.
+      https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA0001.md
+      理由: テストプロジェクトではドキュメンテーションコメントは必要ない。
+    -->
+    <NoWarn>$(NoWarn);SA0001</NoWarn>
+
+    <!--
+      Microsoft Testing Platformを有効化する。
+
+      https://xunit.net/docs/getting-started/v3/microsoft-testing-platform
+      https://learn.microsoft.com/dotnet/core/testing/unit-testing-platform-intro
+      https://learn.microsoft.com/dotnet/core/project-sdk/msbuild-props#testingplatformdotnettestsupport
+      https://learn.microsoft.com/dotnet/core/testing/unit-testing-platform-integration-dotnet-test
+    -->
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(_IsTest)' == 'true'">
+    <PackageReference Include="Shouldly" Version="4.2.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(_IsTest)' == 'true' and '$(TargetFrameworkIdentifier)' == '.NETFramework' and '$(OS)' == 'Unix'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="*" />
+  </ItemGroup>
+
+</Project>
