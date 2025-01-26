@@ -1,7 +1,3 @@
 <Project>
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))" />
-
-  <Import Condition="'$(OutputType)' == 'Library'" Project="$(BuildCommonDirectory)Library.targets" />
-  <Import Condition="'$(OutputType)' == 'Exe' or '$(OutputType)' == 'WinExe'" Project="$(BuildCommonDirectory)Exe.targets" />
-
+  <Import Condition="'$(MSBuildProjectExtension)' == '.csproj'" Project="Source.targets" />
 </Project>
