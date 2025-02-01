@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="*" />
+    <PackageReference Include="BenchmarkDotNet" />
   </ItemGroup>
 
 </Project>
