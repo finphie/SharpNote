@@ -1,59 +1,71 @@
-# C# ベンチマークファイル
-[{*Benchmark*/**,*Benchmark*}.cs]
+[*.cs]
+
+## Microsoft.CodeAnalysis.NetAnalyzers ##
+
+# URI パラメーターを文字列にすることはできません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1054
+# 理由: Uri関連の拡張メソッドでは、文字列を使用する場合があるため。
+dotnet_code_quality.CA1054.excluded_type_names_with_derived_types = UriExtensions
+
+# インスタンス化されていない内部クラスを使用しません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1812
+# 理由: Microsoft.Extensions.DependencyInjectionなどで、型をジェネリックとして使用すると誤検知するため。
+# https://github.com/dotnet/roslyn-analyzers/issues/6561
+dotnet_diagnostic.CA1812.severity = none
+
+## Microsoft.CodeAnalysis.Analyzer ##
+
+# コンパイラ拡張機能は、netstandard2.0 を対象とするアセンブリに実装する必要があります
+# https://github.com/dotnet/roslyn-analyzers/blob/main/docs/rules/RS1041.md
+# 理由: .NET Standard 2.0以外も対象としたいため。
+dotnet_diagnostic.RS1041.severity = none
+
+[*{Helpers,Extensions,Factory}.cs]
+
+## Microsoft.CodeAnalysis.NetAnalyzers ##
+
+# インスタンス化されていない内部クラスを使用しません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1812
+# 理由: 有効化したいクラスのため。
+dotnet_diagnostic.CA1812.severity = warning
+
+[*Extensions.cs]
+
+## Microsoft.CodeAnalysis.NetAnalyzers ##
+
+# 入れ子にされた型を参照可能にすることはできません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1034
+# 理由: 拡張メンバーで誤検知するため。
+# https://github.com/dotnet/roslyn/issues/78858
+# https://github.com/dotnet/roslyn-analyzers/issues/7734
+dotnet_diagnostic.CA1034.severity = none
+
+[*{ViewModel,ViewModelBase}.cs]
+
+## Microsoft.CodeAnalysis.NetAnalyzers ##
+
+# 識別子は、大文字と小文字の区別以外にも相違していなければなりません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1708
+# 理由: CommunityToolkit.Mvvmの仕様。
+# https://github.com/CommunityToolkit/dotnet/issues/1045
+dotnet_diagnostic.CA1708.severity = none
+
+## IDisposableAnalyzers ##
+
+# Don't ignore created IDisposable
+# https://github.com/DotNetAnalyzers/IDisposableAnalyzers/blob/master/documentation/IDISP003.md
+# 理由: IDisposable.AddTo(ref DisposableBuilder)で誤検知するため。
+dotnet_diagnostic.IDISP003.severity = none
+
+# ベンチマークやサンプルプロジェクト
+[*.{Benchmarks,Sample}/**.cs]
 
 # 公開されている型またはメンバー 'Type_or_Member' の XML コメントがありません
 # https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/cs1591
 # 理由: ドキュメンテーションコメントを使用しない。
 dotnet_diagnostic.CS1591.severity = none
 
-## Microsoft.CodeAnalysis.NetAnalyzers ##
-
-# Do not declare static members on generic types
-# https://docs.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1000
-# 理由: ベンチマークを取る場合がある。
-dotnet_diagnostic.CA1000.severity = none
-
-# Validate arguments of public methods
-# https://docs.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1062
-# 理由: 引数を検証する必要はない。
-dotnet_diagnostic.CA1062.severity = none
-
-# Normalize strings to uppercase
-# https://docs.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1308
-# 理由: ベンチマークを取る場合がある。
-dotnet_diagnostic.CA1308.severity = none
-
-# Identifiers should not contain underscores
-# https://docs.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1707
-# 理由: 識別子にアンダースコアを使いたい。
-dotnet_diagnostic.CA1707.severity = none
-
-# Initialize reference type static fields inline
-# https://docs.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1810
-# 理由: 静的コンストラクターを使用しても問題ない。
-dotnet_diagnostic.CA1810.severity = none
-
-# Mark members as static
-# https://docs.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1822
-# 理由: ベンチマークプロジェクト。
-dotnet_diagnostic.CA1822.severity = none
-
-# Do not use insecure randomness
-# https://docs.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5394
-# 理由: ベンチマークを取る場合がある。
-dotnet_diagnostic.CA5394.severity = none
-
 ## StyleCop.Analyzers ##
-
-# Two or more fields were declared in the same field declaration syntax.
-# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1132.md
-# 理由: ベンチマークプロジェクト。
-dotnet_diagnostic.SA1132.severity = none
-
-# A Code Analysis SuppressMessage attribute does not include a justification.
-# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1404.md
-# 理由: ベンチマークプロジェクト。
-dotnet_diagnostic.SA1404.severity = none
 
 # A C# code element is missing a documentation header.
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1600.md
@@ -69,3 +81,103 @@ dotnet_diagnostic.SA1601.severity = none
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1602.md
 # 理由: ドキュメンテーションコメントを使用しない。
 dotnet_diagnostic.SA1602.severity = none
+
+# ベンチマークプロジェクト
+[*.Benchmarks/**.cs]
+
+## Microsoft.CodeAnalysis.NetAnalyzers ##
+
+# ジェネリック型の静的メンバーを宣言しません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1000
+# 理由: ベンチマーク対象にする場合がある。
+dotnet_diagnostic.CA1000.severity = none
+
+# パブリック メソッドの引数の検証
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1062
+# 理由: 引数を検証する必要はない。
+dotnet_diagnostic.CA1062.severity = none
+
+# 文字列を大文字に標準化します
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1308
+# 理由: ベンチマーク対象にする場合がある。
+dotnet_diagnostic.CA1308.severity = none
+
+# 参照型の静的フィールドをインラインで初期化します
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1810
+# 理由: 静的コンストラクターを使用しても問題ない。
+dotnet_diagnostic.CA1810.severity = none
+
+# プロパティは、配列を返すことはできません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1819
+# 理由: ベンチマーク対象にする場合がある。
+dotnet_diagnostic.CA1819.severity = none
+
+# 'CompositeFormat' を使用する
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1863
+# 理由: ベンチマーク対象にする場合がある。
+dotnet_diagnostic.CA1863.severity = none
+
+# 安全でないランダム度を使用しません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca5394
+# 理由: 暗号強度の低い擬似乱数ジェネレーターを使用しても問題ない。
+dotnet_diagnostic.CA5394.severity = none
+
+## StyleCop.Analyzers ##
+
+# A Code Analysis SuppressMessage attribute does not include a justification.
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1404.md
+# 理由: 警告抑制理由の表記は必要ない。
+dotnet_diagnostic.SA1404.severity = none
+
+## IDisposableAnalyzers ##
+
+# Prefer using
+# https://github.com/DotNetAnalyzers/IDisposableAnalyzers/blob/master/documentation/IDISP017.md
+# 理由: 明示的にDisposeメソッドを呼び出す場合がある。
+dotnet_diagnostic.IDISP017.severity = none
+
+# C#ベンチマークファイル
+[{*Benchmark,*Benchmark.*}.cs]
+
+# null非許容の変数には、コンストラクターの終了時にnull以外の値が入っていなければなりません
+# https://learn.microsoft.com/dotnet/csharp/language-reference/compiler-messages/nullable-warnings#nonnullable-reference-not-initialized
+# 理由: GlobalSetupなどで別途初期化する。
+dotnet_diagnostic.CS8618.severity = none
+
+## Microsoft.CodeAnalysis.NetAnalyzers ##
+
+# Consider making public types internal (public 型を internal にすることを検討する)
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1515
+# 理由: ベンチマーク対象クラスはpublicにする必要がある。
+dotnet_diagnostic.CA1515.severity = none
+
+# 識別子はアンダースコアを含むことはできません
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1707
+# 理由: 識別子にアンダースコアを使いたい。
+dotnet_diagnostic.CA1707.severity = none
+
+# メンバーを static に設定します
+# https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1822
+# 理由: ベンチマーク対象メソッドはインスタンスメソッドにする必要がある。
+dotnet_diagnostic.CA1822.severity = none
+
+## StyleCop.Analyzers ##
+
+# Two or more fields were declared in the same field declaration syntax.
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1132.md
+# 理由: 複数のフィールドを同時に宣言したい場合がある。
+dotnet_diagnostic.SA1132.severity = none
+
+# A C# code file contains more than one unique type.
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1402.md
+# 理由: 1ファイルに収めたい場合がある。
+dotnet_diagnostic.SA1402.severity = none
+
+[*.Sample/Program.cs]
+
+## StyleCop.Analyzers ##
+
+# The file name of a C# code file does not match the first type declared in the file.
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1649.md
+# 理由: 複数の型を定義したいため。
+dotnet_diagnostic.SA1649.severity = none

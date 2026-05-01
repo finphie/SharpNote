@@ -1,17 +1,35 @@
 <Project>
   <!--
     実行ファイル関連の設定
+    .NET 10以降のみ対応
     このファイルは、プロジェクトファイルの末尾で直接インポートする必要あり。
     Directory.Build.propsでインポートした場合、一部のプロパティ設定が機能しない。
   -->
 
+  <PropertyGroup>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
+
+    <!-- 発行先ディレクトリにシンボルファイルをコピーしない。 -->
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <!--
+      パッケージのシンボルファイルをコピーする。
+      https://learn.microsoft.com/dotnet/core/project-sdk/msbuild-props#copydebugsymbolfilesfrompackages
+    -->
+    <CopyDebugSymbolFilesFromPackages>true</CopyDebugSymbolFilesFromPackages>
+  </PropertyGroup>
+
   <Import Project="$(MSBuildThisFileDirectory)Exe.Platform.props" />
 
-  <Import Condition="'$(IsWinUI)' == 'true'" Project="$(BuildCommonPlatformDirectory)Gui/WinUI.props" />
+  <Import Condition="'$(IsWinUi)' == 'true'" Project="$(BuildCommonPlatformDirectory)Gui/WinUi.props" />
   <Import Condition="'$(IsWpf)' == 'true'" Project="$(BuildCommonPlatformDirectory)Gui/Wpf.props" />
   <Import Condition="'$(IsMaui)' == 'true'" Project="$(BuildCommonPlatformDirectory)Gui/Maui.props" />
-  <Import Condition="'$(IsAspNet)' == 'true'" Project="$(BuildCommonPlatformDirectory)AspNet/AspNet.props" />
   <Import Condition="'$(IsBlazorWebAssembly)' == 'true'" Project="$(BuildCommonPlatformDirectory)AspNet/BlazorWebAssembly.props" />
+  <Import Condition="'$(IsBlazorServer)' == 'true'" Project="$(BuildCommonPlatformDirectory)AspNet/BlazorServer.props" />
+  <Import Condition="'$(IsAspNet)' == 'true'" Project="$(BuildCommonPlatformDirectory)AspNet/AspNet.props" />
+  <Import Condition="'$(IsAvalonia)' == 'true'" Project="$(BuildCommonPlatformDirectory)Gui/Avalonia.props" />
   <Import Condition="'$(IsConsole)' == 'true'" Project="$(BuildCommonPlatformDirectory)Console/Console.props" />
 
 </Project>

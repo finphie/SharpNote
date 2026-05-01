@@ -1,14 +1,12 @@
 <Project>
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  <Import Condition="'$(MSBuildProjectExtension)' == '.csproj'" Project="Source.props" />
 
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <!-- 決定論的ビルドを行う。 -->
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  <!-- .esproj設定 -->
+  <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.esproj'">
+    <!--
+      依存関係の復元時にエラーが発生するので、その回避策。
+      https://github.com/NuGet/Home/issues/12817
+    -->
+    <RestoreEnableGlobalPackageReference>false</RestoreEnableGlobalPackageReference>
   </PropertyGroup>
-
-  <ItemGroup>
-    <!-- 「ソリューション名.Shared」ディレクトリに存在するC#ファイルを、全プロジェクトで共有する。 -->
-    <Compile Include="$(MSBuildThisFileDirectory)/$(SolutionName).Shared/**/*.cs" LinkBase="Shared" />
-  </ItemGroup>
-
 </Project>

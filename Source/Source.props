@@ -1,0 +1,17 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <!-- 決定論的ビルドを行う。 -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- プロジェクト共通のファイルを読み込む。 -->
+    <Compile Include="$(MSBuildThisFileDirectory)/Common/**/*.cs" LinkBase="Common" />
+
+    <!-- 「ソリューション名.Shared」ディレクトリに存在するC#ファイルを、全プロジェクトで共有する。 -->
+    <Compile Include="$(MSBuildThisFileDirectory)/$(SolutionName).Shared/**/*.cs" LinkBase="Shared" />
+  </ItemGroup>
+
+</Project>
