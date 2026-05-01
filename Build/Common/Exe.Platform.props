@@ -12,13 +12,15 @@
 
     <When Condition="'$(UseWinUI)' == 'true'">
       <PropertyGroup>
-        <IsWinUI>true</IsWinUI>
+        <IsWinUi>true</IsWinUi>
+        <ProjectIdentifier>Windows</ProjectIdentifier>
       </PropertyGroup>
     </When>
 
     <When Condition="'$(UseWPF)' == 'true'">
       <PropertyGroup>
         <IsWpf>true</IsWpf>
+        <ProjectIdentifier>Windows</ProjectIdentifier>
       </PropertyGroup>
     </When>
 
@@ -26,24 +28,43 @@
     <When Condition="'$(UseMaui)' == 'true'">
       <PropertyGroup>
         <IsMaui>true</IsMaui>
-      </PropertyGroup>
-    </When>
-
-    <When Condition="'$(UsingMicrosoftNETSdkWeb)' == 'true'">
-      <PropertyGroup>
-        <IsAspNet>true</IsAspNet>
+        <ProjectIdentifier>MAUI</ProjectIdentifier>
       </PropertyGroup>
     </When>
 
     <When Condition="'$(UsingMicrosoftNETSdkBlazorWebAssembly)' == 'true'">
       <PropertyGroup>
         <IsBlazorWebAssembly>true</IsBlazorWebAssembly>
+        <ProjectIdentifier>Browser</ProjectIdentifier>
+      </PropertyGroup>
+    </When>
+
+    <!-- Blazor Web AppまたはBlazor Server -->
+    <When Condition="'$(UsingMicrosoftNETSdkRazor)' == 'true'">
+      <PropertyGroup>
+        <IsBlazorServer>true</IsBlazorServer>
+        <ProjectIdentifier>Server</ProjectIdentifier>
+      </PropertyGroup>
+    </When>
+
+    <When Condition="'$(UsingMicrosoftNETSdkWeb)' == 'true'">
+      <PropertyGroup>
+        <IsAspNet>true</IsAspNet>
+        <ProjectIdentifier>Server</ProjectIdentifier>
+      </PropertyGroup>
+    </When>
+
+    <When Condition="'$(UseAvalonia)' == 'true'">
+      <PropertyGroup>
+        <IsAvalonia>true</IsAvalonia>
+        <ProjectIdentifier>Avalonia</ProjectIdentifier>
       </PropertyGroup>
     </When>
 
     <Otherwise>
       <PropertyGroup>
         <IsConsole>true</IsConsole>
+        <ProjectIdentifier>Console</ProjectIdentifier>
       </PropertyGroup>
     </Otherwise>
 

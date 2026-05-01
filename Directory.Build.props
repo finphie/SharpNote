@@ -1,13 +1,19 @@
 <Project>
 
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
     <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+  </PropertyGroup>
+
+  <!-- 成果物の出力レイアウト -->
+  <PropertyGroup>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
   </PropertyGroup>
 
   <!-- XMLドキュメントファイル関連 -->
@@ -26,6 +32,7 @@
     <BuildCommonPackDirectory>$(BuildCommonDirectory)Pack/</BuildCommonPackDirectory>
     <BuildCommonPublishDirectory>$(BuildCommonDirectory)Publish/</BuildCommonPublishDirectory>
     <BuildCommonPlatformDirectory>$(BuildCommonDirectory)Platform/</BuildCommonPlatformDirectory>
+    <SourceDirectory>$(MSBuildThisFileDirectory)Source/</SourceDirectory>
   </PropertyGroup>
 
   <!-- バージョン関連変数の定義 -->
@@ -35,12 +42,8 @@
     <BuildVersion>$([System.String]::Format("{0:D3}", $([System.Version]::Parse("$(Version)").Build)))</BuildVersion>
   </PropertyGroup>
 
-  <!-- プロジェクト共通のファイルを読み込む -->
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Source/Common/**/*.cs" Visible="false" />
-  </ItemGroup>
-
   <Import Project="$(BuildCommonAnalyzersDirectory)Analyzers.props" />
   <Import Project="$(BuildCommonPlatformDirectory)Metadata.props" />
+  <Import Project="$(BuildCommonPlatformDirectory)Resource.props" />
 
 </Project>

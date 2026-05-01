@@ -1,0 +1,21 @@
+<Project>
+  <!-- Avalonia（デスクトップ）関連の設定 -->
+
+  <PropertyGroup>
+    <IsPublishable>true</IsPublishable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+
+    <PublishMode>NativeAot</PublishMode>
+    <EnableReflection>true</EnableReflection>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+
+    <!--
+      プロジェクト全体でコンパイルされたバインディングを有効にする。
+      https://docs.avaloniaui.net/docs/data-binding/compiled-bindings
+    -->
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <Import Project="$(BuildCommonPublishDirectory)Publish.props" />
+
+</Project>
